@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.LibTagMapper">
+
+    <resultMap type="LibTag" id="LibTagResult">
+        <id property="tagId" column="tag_id"/>
+        <result property="tagName" column="tag_name"/>
+        <result property="tagKey" column="tag_key"/>
+        <result property="tagSort" column="tag_sort"/>
+        <result property="dataScope" column="data_scope"/>
+        <result property="tagStatus" column="tag_status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectTagContactVo">
+        select tag_id, tag_name, tag_key, tag_sort, data_scope,
+            tag_status, del_flag, create_time, remark
+        from sys_tag r
+    </sql>
+
+    <sql id="selectTagVo">
+		select r.tag_id, r.tag_name, r.tag_key, r.tag_sort, r.data_scope, r.tag_status, r.del_flag, r.create_time, r.remark
+        from sys_tag r
+	</sql>
+
+    <select id="selectTagList" parameterType="LibTag" resultMap="LibTagResult">
+        <include refid="selectTagContactVo"/>
+        where r.del_flag = '0'
+        <if test="tagName != null and tagName != ''">
+            AND r.tag_name like concat('%', #{tagName}, '%')
+        </if>
+        <if test="tagStatus != null and tagStatus != ''">
+            AND r.tag_status = #{tagStatus}
+        </if>
+        <if test="tagKey != null and tagKey != ''">
+            AND r.tag_key like concat('%', #{tagKey}, '%')
+        </if>
+        <if test="dataScope != null and dataScope != ''">
+            AND r.data_scope = #{dataScope}
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            and date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            and date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="checkTagNameUnique" parameterType="String" resultMap="LibTagResult">
+        <include refid="selectTagVo"/>
+        where r.tag_name=#{tagName}
+    </select>
+
+    <select id="checkTagKeyUnique" parameterType="String" resultMap="LibTagResult">
+        <include refid="selectTagVo"/>
+        where r.tag_key=#{tagKey}
+    </select>
+
+    <select id="selectTagById" parameterType="Long" resultMap="LibTagResult">
+        <include refid="selectTagVo"/>
+        where r.del_flag = '0' and r.tag_id = #{tagId}
+    </select>
+
+
+    <delete id="deleteTagById" parameterType="Long">
+ 		delete from sys_tag where tag_id = #{tagId}
+ 	</delete>
+
+    <delete id="deleteTagByIds" parameterType="Long">
+        update sys_tag set del_flag = '2' where tag_id in
+        <foreach collection="array" item="tagId" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+    </delete>
+
+    <update id="updateTag" parameterType="LibTag">
+        update sys_tag
+        <set>
+            <if test="tagName != null and tagName != ''">tag_name = #{tagName},</if>
+            <if test="tagKey != null and tagKey != ''">tag_key = #{tagKey},</if>
+            <if test="tagSort != null and tagSort != ''">tag_sort = #{tagSort},</if>
+            <if test="dataScope != null and dataScope != ''">data_scope = #{dataScope},</if>
+            <if test="tagStatus != null and tagStatus != ''">tag_status = #{tagStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where tag_id = #{tagId}
+    </update>
+
+    <insert id="insertTag" parameterType="LibTag" useGeneratedKeys="true" keyProperty="tagId">
+        insert into sys_tag(
+        <if test="tagId != null and tagId != 0">tag_id,</if>
+        <if test="tagName != null and tagName != ''">tag_name,</if>
+        <if test="tagKey != null and tagKey != ''">tag_key,</if>
+        <if test="tagSort != null and tagSort != ''">tag_sort,</if>
+        <if test="dataScope != null and dataScope != ''">data_scope,</if>
+        <if test="tagStatus != null and tagStatus != ''">tag_status,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="tagId != null and tagId != 0">#{tagId},</if>
+        <if test="tagName != null and tagName != ''">#{tagName},</if>
+        <if test="tagKey != null and tagKey != ''">#{tagKey},</if>
+        <if test="tagSort != null and tagSort != ''">#{tagSort},</if>
+        <if test="dataScope != null and dataScope != ''">#{dataScope},</if>
+        <if test="tagStatus != null and tagStatus != ''">#{tagStatus},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+</mapper> 

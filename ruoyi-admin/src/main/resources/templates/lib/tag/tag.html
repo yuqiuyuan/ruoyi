@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('标签列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="role-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            标签名称：<input type="text" name="tagName"/>
+                        </li>
+                        <li>
+                            权限字符：<input type="text" name="tagKey"/>
+                        </li>
+                        <li>
+                            标签状态：<select name="tagStatus" th:with="type=${@dict.getType('sys_normal_disable')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <li class="select-time">
+                            <label>创建时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="lib:tag:add">
+                <i class="fa fa-plus"></i> 新增
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="lib:tag:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="lib:tag:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('lib:tag:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('lib:tag:remove')}]];
+    var prefix = ctx + "lib/tag";
+
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            sortName: "tagSort",
+            modalName: "标签",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'tagId',
+                    title: '标签编号'
+                },
+                {
+                    field: 'tagName',
+                    title: '标签名称',
+                    sortable: true
+                },
+                {
+                    field: 'tagKey',
+                    title: '权限字符',
+                    sortable: true
+                },
+                {
+                    field: 'tagSort',
+                    title: '显示顺序',
+                    sortable: true
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '标签状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.tagId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.tagId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+    /* 标签状态显示 */
+    function statusTools(row) {
+        if (row.tagStatus == 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.tagId + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.tagId + '\')"></i> ';
+        }
+    }
+
+    /* 标签管理-停用 */
+    function disable(tagId) {
+        $.modal.confirm("确认要停用标签吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"tagId": tagId, "tagStatus": 1});
+        })
+    }
+
+    /* 标签管理启用 */
+    function enable(tagId) {
+        $.modal.confirm("确认要启用标签吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"tagId": tagId, "tagStatus": 0});
+        })
+    }
+</script>
+</body>
+</html>
