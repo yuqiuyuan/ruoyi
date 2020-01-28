@@ -67,24 +67,6 @@
 		                }
 		            }
 				},
-				tagKey:{
-					remote: {
-		                url: ctx + "lib/tag/checkTagKeyUnique",
-		                type: "post",
-		                dataType: "json",
-		                data: {
-							"tagId": function() {
-								return $("#tagId").val();
-							},
-							"tagKey": function() {
-							    return $.common.trim($("#tagKey").val());
-							}
-		                },
-		                dataFilter: function(data, type) {
-		                	return $.validate.unique(data);
-		                }
-		            }
-				},
 				tagSort:{
 					digits:true
 				},

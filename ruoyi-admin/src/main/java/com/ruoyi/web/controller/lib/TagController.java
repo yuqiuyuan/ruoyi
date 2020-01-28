@@ -90,7 +90,7 @@ public class TagController extends BaseController {
      */
     @PostMapping("/checkTagKeyUnique")
     @ResponseBody
-    public String checkRoleKeyUnique(LibTag tag) {
+    public String checkTagKeyUnique(LibTag tag) {
         return libTagService.checkTagKeyUnique(tag);
     }
 
@@ -128,8 +128,7 @@ public class TagController extends BaseController {
     @RequiresPermissions("lib:tag:edit")
     @PostMapping("/changeStatus")
     @ResponseBody
-    public AjaxResult changeStatus(LibTag tag)
-    {
+    public AjaxResult changeStatus(LibTag tag) {
         return toAjax(libTagService.changeStatus(tag));
     }
 
@@ -137,14 +136,10 @@ public class TagController extends BaseController {
     @Log(title = "角色管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
-        try
-        {
+    public AjaxResult remove(String ids) {
+        try {
             return toAjax(libTagService.deleteTagByIds(ids));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return error(e.getMessage());
         }
     }
