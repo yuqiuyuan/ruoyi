@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.LibDocTagMapper">
+
+    <resultMap type="LibDocTag" id="LibDocTagResult">
+        <id property="docId" column="doc_id"/>
+        <id property="tagId" column="tag_id"/>
+        <result property="scanCount" column="scan_count"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <sql id="selectDocTagContactVo">
+        select doc_id, tag_id, scan_count, update_time
+        from sys_doc_tag r
+    </sql>
+
+    <sql id="selectDocTagVo">
+		select r.doc_id, r.tag_id, r.scan_count, r.update_time
+        from sys_doc_tag r
+	</sql>
+
+    <select id="selectDocTagList" parameterType="LibDocTag" resultMap="LibDocTagResult">
+        <include refid="selectDocTagContactVo"/>
+        where r.del_flag = '0'
+        <if test="docId != null and docId != ''">
+            AND r.doc_id = #{docId}
+        </if>
+        <if test="tagId != null and tagId != ''">
+            AND r.tag_id = #{tagId}
+        </if>
+    </select>
+
+
+
+    <select id="selectDocTagByDocId" parameterType="Long" resultMap="LibDocTagResult">
+        <include refid="selectDocTagVo"/>
+        where r.del_flag = '0' and r.doc_id = #{docId}
+    </select>
+
+
+    <delete id="deleteDocTagByDocId" parameterType="Long">
+ 		delete from sys_doc_tag where doc_id = #{docId}
+ 	</delete>
+
+    <delete id="deleteDocTagByIds" parameterType="Long">
+        update sys_doc_tag set del_flag = '2' where doc_id in
+        <foreach collection="array" item="docId" open="(" separator="," close=")">
+            #{docId}
+        </foreach>
+    </delete>
+
+    <insert id="insertDocTag" parameterType="LibDocTag" useGeneratedKeys="true" keyProperty="docId">
+        insert into sys_doc_tag(
+        <if test="docId != null and docId != 0">doc_id,</if>
+        <if test="tagId != null and tagId != ''">tag_id,</if>
+        update_time
+        )values(
+        <if test="docId != null and docId != 0">#{docId},</if>
+        <if test="tagId != null and tagId != ''">#{tagId},</if>
+        sysdate()
+        )
+    </insert>
+
+</mapper> 

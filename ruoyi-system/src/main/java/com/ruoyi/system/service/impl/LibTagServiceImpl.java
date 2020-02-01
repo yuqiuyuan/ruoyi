@@ -2,10 +2,8 @@ package com.ruoyi.system.service.impl;
 
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.LibTag;
-import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.mapper.LibTagMapper;
 import com.ruoyi.system.service.ILibTagService;
 import org.springframework.stereotype.Service;
@@ -30,6 +28,11 @@ public class LibTagServiceImpl implements ILibTagService {
     @Override
     public List<LibTag> selectTagList(LibTag tag) {
         return libTagMapper.selectTagList(tag);
+    }
+
+    @Override
+    public List<LibTag> selectTagListByDocId(Long docId) {
+        return libTagMapper.selectTagListByDocId(docId);
     }
 
     @Override
@@ -80,6 +83,15 @@ public class LibTagServiceImpl implements ILibTagService {
     public int deleteTagByIds(String ids) {
         Long[] tagIds = Convert.toLongArray(ids);
         return libTagMapper.deleteTagByIds(tagIds);
+    }
+
+    @Override
+    public LibTag selectTagByName(LibTag tag) {
+        final List<LibTag> libTags = libTagMapper.selectTagList(tag);
+        if (libTags.size() > 0) {
+            return libTags.get(0);
+        }
+        return null;
     }
 
 }

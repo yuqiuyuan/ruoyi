@@ -55,6 +55,13 @@
         ${params.dataScope}
     </select>
 
+    <select id="selectTagListByDocId" parameterType="Long" resultMap="LibTagResult">
+        <include refid="selectTagContactVo"/>
+        where r.del_flag = '0' and r.tag_id in (select tag_id from sys_doc_tag where doc_id=#{docId})
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
     <select id="checkTagNameUnique" parameterType="String" resultMap="LibTagResult">
         <include refid="selectTagVo"/>
         where r.tag_name=#{tagName}

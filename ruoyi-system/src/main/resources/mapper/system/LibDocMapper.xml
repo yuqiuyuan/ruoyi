@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.LibDocMapper">
+
+    <resultMap type="LibDoc" id="LibDocResult">
+        <id property="docId" column="doc_id"/>
+        <result property="docName" column="doc_name"/>
+        <result property="docType" column="doc_type"/>
+        <result property="docImg" column="doc_img"/>
+        <result property="docUrl" column="doc_url"/>
+        <result property="docStatus" column="doc_status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="scanCount" column="scan_count"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="docSort" column="doc_sort"/>
+    </resultMap>
+
+    <sql id="selectDocContactVo">
+        select doc_id, doc_name, doc_type, doc_img, doc_url,
+            doc_status, del_flag, create_time, remark, doc_sort
+        from sys_doc r
+    </sql>
+
+    <sql id="selectDocVo">
+		select r.doc_id, r.doc_name, r.doc_type, r.doc_img, r.doc_url, r.doc_status, r.del_flag, r.create_time, r.remark, r.doc_sort
+        from sys_doc r
+	</sql>
+
+    <select id="selectDocList" parameterType="LibDoc" resultMap="LibDocResult">
+        <include refid="selectDocContactVo"/>
+        where r.del_flag = '0'
+        <if test="docName != null and docName != ''">
+            AND r.doc_name like concat('%', #{docName}, '%')
+        </if>
+        <if test="docStatus != null and docStatus != ''">
+            AND r.doc_status = #{docStatus}
+        </if>
+        <if test="docType != null and docType != ''">
+            AND r.doc_type= #{docType}
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            and date_format(r.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            and date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+    </select>
+
+    <select id="checkDocNameUnique" parameterType="String" resultMap="LibDocResult">
+        <include refid="selectDocVo"/>
+        where r.doc_name=#{docName}
+    </select>
+
+    <select id="selectDocById" parameterType="Long" resultMap="LibDocResult">
+        <include refid="selectDocVo"/>
+        where r.del_flag = '0' and r.doc_id = #{docId}
+    </select>
+
+
+    <delete id="deleteDocById" parameterType="Long">
+ 		delete from sys_doc where doc_id = #{docId}
+ 	</delete>
+
+    <delete id="deleteDocByIds" parameterType="Long">
+        update sys_doc set del_flag = '2' where doc_id in
+        <foreach collection="array" item="docId" open="(" separator="," close=")">
+            #{docId}
+        </foreach>
+    </delete>
+
+    <update id="updateDoc" parameterType="LibDoc">
+        update sys_doc
+        <set>
+            <if test="docName != null and tagName != ''">doc_name = #{docName},</if>
+            <if test="docType != null and docType != ''">doc_type= #{docType},</if>
+            <if test="docImg != null and docImg != ''">doc_img= #{docImg},</if>
+            <if test="docUrl != null and docUrl != ''">doc_url= #{docUrl},</if>
+            <if test="docStatus != null and docStatus != ''">doc_status= #{docStatus},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag= #{delFlag},</if>
+            <if test="scanCount != null and scanCount != ''">scan_count= #{scanCount},</if>
+            <if test="updateBy != null and updateBy != ''">update_by= #{updateBy},</if>
+            <if test="remark != null and remark != ''">remark= #{remark},</if>
+            <if test="docSort != null and docSort != ''">doc_sort= #{docSort},</if>
+            update_time = sysdate()
+        </set>
+        where doc_id = #{docId}
+    </update>
+
+    <insert id="insertDoc" parameterType="LibDoc" useGeneratedKeys="true" keyProperty="docId">
+        insert into sys_doc(
+        <if test="docId != null and docId != 0">doc_id,</if>
+        <if test="docName != null and docName != ''">doc_name,</if>
+        <if test="docType != null and docType != ''">doc_type,</if>
+        <if test="docImg != null and docImg != ''">doc_img,</if>
+        <if test="docUrl != null and docUrl != ''">doc_url,</if>
+        <if test="docStatus != null and docStatus != ''">doc_status,</if>
+        <if test="delFlag != null and delFlag != ''">del_flag,</if>
+        <if test="scanCount != null and scanCount != ''">scan_count,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="createTime != null and createTime != ''">create_time,</if>
+        <if test="updateBy != null and updateBy != ''">update_by,</if>
+        <if test="updateTime != null and updateTime != ''">update_time,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="docSort != null and docSort != ''">doc_sort,</if>
+        create_time
+        )values(
+        <if test="docId != null and docId != 0">#{docId},</if>
+        <if test="docName != null and docName != ''">#{docName},</if>
+        <if test="docType != null and docType != ''">#{docType},</if>
+        <if test="docImg != null and docImg != ''">#{docImg},</if>
+        <if test="docUrl != null and docUrl != ''">#{docUrl},</if>
+        <if test="docStatus != null and docStatus != ''">#{docStatus},</if>
+        <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+        <if test="scanCount != null and scanCount != ''">#{scanCount},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="createTime != null and createTime != ''">#{createTime},</if>
+        <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+        <if test="updateTime != null and updateTime != ''">#{updateTime},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="docSort != null and docSort != ''">#{docSort},</if>
+        sysdate()
+        )
+    </insert>
+
+</mapper> 

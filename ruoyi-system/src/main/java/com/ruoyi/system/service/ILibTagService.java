@@ -19,6 +19,14 @@ public interface ILibTagService {
     List<LibTag> selectTagList(LibTag tag);
 
     /**
+     * 根据文档id查询标签列表
+     *
+     * @param docId 文档id
+     * @return list
+     */
+    List<LibTag> selectTagListByDocId(Long docId);
+
+    /**
      * 标签名称的唯一性检查
      *
      * @param tag 标签
@@ -49,4 +57,12 @@ public interface ILibTagService {
     int changeStatus(LibTag tag);
 
     int deleteTagByIds(String ids);
+
+    /**
+     * 根据标签名称查询标签
+     *
+     * @param tag 查询参数
+     * @return result
+     */
+    LibTag selectTagByName(LibTag tag);
 }

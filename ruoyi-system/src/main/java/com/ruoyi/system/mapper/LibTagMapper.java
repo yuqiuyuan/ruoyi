@@ -15,6 +15,14 @@ public interface LibTagMapper {
     List<LibTag> selectTagList(LibTag tag);
 
     /**
+     * 根据文档id查询标签列表
+     *
+     * @param docId 文档id
+     * @return list
+     */
+    List<LibTag> selectTagListByDocId(Long docId);
+
+    /**
      * 标签名称的唯一性检查
      *
      * @param tagName 标签名称

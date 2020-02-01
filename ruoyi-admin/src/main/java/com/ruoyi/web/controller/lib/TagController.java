@@ -19,20 +19,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * @ClassName TagController
- * @Description 标签管理控制器
- * @Author drebander
- * @Date 2020-01-25 4:00 PM
- * @Version 1.0
- **/
+ * 标签管理控制器
+ *
+ * @author drebander
+ * @since 2020-01-28
+ */
 
 @Controller
 @RequestMapping("/lib/tag")
 public class TagController extends BaseController {
 
     private static String PREFIX = "/lib/tag";
+    private final ILibTagService libTagService;
+
     @Autowired
-    private ILibTagService libTagService;
+    public TagController(ILibTagService libTagService) {
+        this.libTagService = libTagService;
+    }
 
     @RequiresPermissions("lib:tag:view")
     @GetMapping()
@@ -66,9 +69,9 @@ public class TagController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(@Validated LibTag tag) {
         if (UserConstants.ROLE_NAME_NOT_UNIQUE.equals(libTagService.checkTagNameUnique(tag))) {
-            return error("新增角色'" + tag.getTagName() + "'失败，标签名称已存在");
+            return error("新增标签'" + tag.getTagName() + "'失败，标签名称已存在");
         } else if (UserConstants.ROLE_KEY_NOT_UNIQUE.equals(libTagService.checkTagKeyUnique(tag))) {
-            return error("新增角色'" + tag.getTagName() + "'失败，标签权限已存在");
+            return error("新增标签'" + tag.getTagName() + "'失败，标签权限已存在");
         }
         tag.setCreateBy(ShiroUtils.getLoginName());
         ShiroUtils.clearCachedAuthorizationInfo();
