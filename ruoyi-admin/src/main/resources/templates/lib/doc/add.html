@@ -20,9 +20,13 @@
             <div class="col-sm-8">
                 <div class="input-group">
                     <input type="text" class="form-control add-tag" id="add-tag">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary" onclick="addTag()">添加</button>
-                    </span>
+                    <div class="input-group-btn">
+                        <!--<span class="input-group-btn">-->
+                        <button type="button" class="addBtn btn-primary" onclick="addTag()">添加</button>
+                        <!--</span>-->
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -114,6 +118,7 @@
 </div>
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: ztree-js"/>
+<th:block th:include="include :: bootstrap-suggest-js"/>
 <script type="text/javascript">
 
     $("#form-role-add").validate({
@@ -144,6 +149,21 @@
             },
         },
         focusCleanup: true
+    });
+
+    var testBssSuggest = $("#add-tag").bsSuggest({
+        url: ctx + "lib/doc/tagModel",
+        showBtn: true,
+        idField: "tagId",
+        keyField: "tagName",
+        autoMinWidth: true,
+        inputWarnColor: 'rgba(255,255,255,255)'
+    }).on('onDataRequestSuccess', function (e, result) {
+        console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword) {
+        console.log('onSetSelectValue: ', keyword);
+    }).on('onUnsetSelectValue', function (e) {
+        console.log("onUnsetSelectValue");
     });
 
     function submitHandler() {
@@ -208,25 +228,54 @@
 
     function addTag() {
         var tagName = $(".add-tag").val();
-        $.ajax({
-            cache: true,
-            type: "POST",
-            url: ctx + "lib/doc/addTag",
-            data: {
-                "tagName": tagName
-            },
-            async: false,
-            error: function (request) {
-                $.modal.alertError("系统错误");
-            },
-            success: function (data) {
-                var label = "<label class=\"checkbox-inline\">\n" +
-                    "                <input type=\"checkbox\" checked='true' value=\"" + data.data.tagId + "\" id=\"inlineCheckbox1\">" + data.data.tagName + "</label>";
-                $("#tag-label-list").append(label);
-                $("#add-tag").val('')
-            }
-        });
+        if (tagName) {
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url: ctx + "lib/doc/addTag",
+                data: {
+                    "tagName": tagName
+                },
+                async: false,
+                error: function (request) {
+                    $.modal.alertError("系统错误");
+                },
+                success: function (data) {
+                    var label = "<label class=\"checkbox-inline\">\n" +
+                        "<input type=\"checkbox\" checked='true' value=\"" + data.data.tagId + "\" id=\"inlineCheckbox1\">" + data.data.tagName + "</label>";
+                    $("#tag-label-list").append(label);
+                    $("#add-tag").val('')
+                }
+            });
+        }
     }
 </script>
+<style type="text/css">
+    .addBtn {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-left: -3px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    button {
+        outline: none;
+    }
+</style>
 </body>
 </html>

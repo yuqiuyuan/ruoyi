@@ -11,6 +11,7 @@ import com.ruoyi.system.domain.LibDoc;
 import com.ruoyi.system.domain.LibTag;
 import com.ruoyi.system.service.ILibDocService;
 import com.ruoyi.system.service.ILibTagService;
+import lombok.Data;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -167,4 +169,32 @@ public class DocController extends BaseController {
         }
     }
 
+    /**
+     * 获取推荐标签
+     */
+    @GetMapping("/tagModel")
+    @ResponseBody
+    public AjaxResult tagModel() {
+        AjaxResult ajax = new AjaxResult();
+        final List<LibTag> libTags = libTagService.selectTagList(new LibTag());
+        List<TagFormModel> tagModes = new LinkedList<>();
+        libTags.forEach(tag -> {
+            tagModes.add(new TagFormModel(tag.getTagId(), tag.getTagName()));
+        });
+        ajax.put("code", 200);
+        ajax.put("value", tagModes);
+        return ajax;
+    }
+
+}
+
+@Data
+class TagFormModel {
+    private Long tagId;
+    private String tagName;
+
+    public TagFormModel(Long tagId, String tagName) {
+        this.tagId = tagId;
+        this.tagName = tagName;
+    }
 }
