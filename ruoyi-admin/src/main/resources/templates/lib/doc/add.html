@@ -105,7 +105,14 @@
             // 将input上的文件名称，和文档类型赋值到对应的标签上
             var docItem = document.getElementById("doc").files[0];
             $("input[name='docName']").val(docItem.name.substr(0, docItem.name.lastIndexOf('.')));
-            $("input[name='docType']").val(docItem.name.substr(docItem.name.lastIndexOf('.')) + 1, docItem.name.length);
+            var documentType = docItem.name.substr(docItem.name.lastIndexOf('.') + 1, docItem.name.length);
+            var typeCode = "0";
+            if (documentType.indexOf("doc") >= 0) {
+                typeCode = "1";
+            } else if (documentType.indexOf("xls") >= 0) {
+                typeCode = "2";
+            }
+            $("input[name='docType']").val(typeCode);
         }
     });
 

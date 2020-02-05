@@ -78,7 +78,7 @@
             },
                 {
                     field: 'docId',
-                    title: '文档编号'
+                    title: '文档编号',
                 },
                 {
                     field: 'docName',
@@ -86,14 +86,24 @@
                     sortable: true
                 },
                 {
-                    field: 'docType',
                     title: '文档类型',
-                    sortable: true
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (row.docType == 2) {
+                            return "EXCEL";
+                        } else if (row.doctype == 1) {
+                            return "WORD";
+                        } else {
+                            return "PDF";
+                        }
+                    }
                 },
                 {
-                    field: 'docImg',
-                    title: '文档图片',
-                    sortable: true
+                    title: '图片',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.imageView(row.docImg);
+                    }
                 },
                 {
                     visible: editFlag == 'hidden' ? false : true,
@@ -106,7 +116,8 @@
                 {
                     field: 'createTime',
                     title: '创建时间',
-                    sortable: true
+                    sortable: true,
+                    align: 'center'
                 },
                 {
                     title: '操作',

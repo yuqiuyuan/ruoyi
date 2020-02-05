@@ -99,6 +99,7 @@ public class DocController extends BaseController {
         libDoc.setCreateBy(ShiroUtils.getLoginName());
         libDoc.setDelFlag(docModel.getDelFlag());
         libDoc.setDocSort(docModel.getDocSort());
+        libDoc.setDocType(docModel.getDocType());
         String filePath = Global.getUploadPath();
         final String tags = docModel.getTags();
         // 上传并返回新文件名称
