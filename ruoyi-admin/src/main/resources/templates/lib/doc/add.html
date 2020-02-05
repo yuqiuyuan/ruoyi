@@ -7,16 +7,35 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-role-add">
+    <form class="form-horizontal m" id="form-role-add" method="post" action="/lib/doc/add"
+          enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">上传文档：</label>
+
+            <div class="col-sm-8 fileinput fileinput-new input-group" style="padding-left: 2%;width: 64.66667%;"
+                 data-provides="fileinput">
+                <div class="form-control" data-trigger="fileinput"><i
+                        class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
+                </div>
+                <span class="input-group-addon btn btn-white btn-file"><span class="fileinput-new">选择</span><span
+                        class="fileinput-exists">更改</span><input id="doc" name="docUrl" multiple type="file"></span>
+                <a href="#" class="input-group-addon btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-3 control-label ">文档名称：</label>
             <div class="col-sm-8">
                 <input class="form-control" type="text" name="docName" id="docName" required>
             </div>
         </div>
+        <div class="form-group" style="display: none">
+            <label class="col-sm-3 control-label ">文档类型：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="docType" id="docType" required>
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">添加标签：</label>
-
             <div class="col-sm-8">
                 <div class="input-group">
                     <input type="text" class="form-control add-tag" id="add-tag">
@@ -30,57 +49,14 @@
                 </div>
             </div>
         </div>
-        <!--文档标签-—start—-->
+        <!--文档标签 start—-->
         <div class="form-group">
             <label class="col-sm-3 control-label">已选标签：</label>
             <div class="col-sm-8" id="tag-label-list"></div>
         </div>
-        <!--文档标签-—end—->
-        <!--文档类型-—start-->
+        <!--文档标签 end-->
         <div class="form-group">
-            <label class="col-sm-3 control-label">文档类型：</label>
-            <div class="col-sm-8">
-                <label class="radio-box">
-                    <div class="checked">
-                        <input type="radio" checked="" value="option1" id="optionsRadios1" name="optionsRadios"
-                               style="position: absolute; opacity: 0;">
-                        <ins class="iCheck-helper"
-                             style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                    </div>
-                    pdf</label>
-                <label class="radio-box">
-                    <div class="">
-                        <input type="radio" value="option2" id="optionsRadios2" name="optionsRadios"
-                               style="position: absolute; opacity: 0;">
-                        <ins class="iCheck-helper"
-                             style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                    </div>
-                    doc</label>
-                <label class="radio-box">
-                    <div class="">
-                        <input type="radio" value="option3" id="optionsRadios3" name="optionsRadios"
-                               style="position: absolute; opacity: 0;">
-                        <ins class="iCheck-helper"
-                             style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
-                    </div>
-                    excel</label>
-            </div>
-        </div>
-        <!--文档类型-—end-->
-        <div class="form-group">
-            <label class="col-sm-3 control-label">上传文档：</label>
 
-            <div class="col-sm-8 fileinput fileinput-new input-group" style="padding-left: 2%;width: 64.66667%;"
-                 data-provides="fileinput">
-                <div class="form-control" data-trigger="fileinput"><i
-                        class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
-                </div>
-                <span class="input-group-addon btn btn-white btn-file"><span class="fileinput-new">选择</span><span
-                        class="fileinput-exists">更改</span><input type="file"></span>
-                <a href="#" class="input-group-addon btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
-            </div>
-        </div>
-        <div class="form-group">
             <label class="col-sm-3 control-label">图片上传：</label>
             <br/>
             <div class="col-sm-8 fileinput fileinput-new" data-provides="fileinput">
@@ -88,15 +64,16 @@
                      style="width: 200px; height: 150px;"></div>
                 <div>
                     <span class="btn btn-white btn-file"><span class="fileinput-new">选择图片</span><span
-                            class="fileinput-exists">更改</span><input type="file"></span>
+                            class="fileinput-exists">更改</span><input type="file" name="docImg" id="fileInputImg"></span>
                     <a href="#" class="btn btn-white fileinput-exists" data-dismiss="fileinput">清除</a>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">显示顺序：</label>
+            <label class="col-sm-3 control-label">显示优先级：</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" name="docSort" id="docSort" required>
+                <input class="form-control" type="text" name="docSort" id="docSort" th:value="0" required>
+                <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>数字越大，优先级越高，默认优先级最低</span>
             </div>
         </div>
         <div class="form-group">
@@ -119,14 +96,25 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: ztree-js"/>
 <th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: jasny-bootstrap-js"/>
 <script type="text/javascript">
+
+    $('#doc').on('change.bs.fileinput ', function (e) {
+        var doc = document.getElementById("doc");
+        if (doc.files.length > 0) {
+            // 将input上的文件名称，和文档类型赋值到对应的标签上
+            var docItem = document.getElementById("doc").files[0];
+            $("input[name='docName']").val(docItem.name.substr(0, docItem.name.lastIndexOf('.')));
+            $("input[name='docType']").val(docItem.name.substr(docItem.name.lastIndexOf('.')) + 1, docItem.name.length);
+        }
+    });
 
     $("#form-role-add").validate({
         rules: {
             onkeyup: false,
             docName: {
                 remote: {
-                    url: ctx + "lib/doc/checkdocNameUnique",
+                    url: ctx + "lib/doc/checkDocNameUnique",
                     type: "post",
                     dataType: "json",
                     data: {
@@ -173,27 +161,34 @@
     }
 
     function add() {
-        var docName = $("input[name='docName']").val();
-        var docType = $("input[name='docType']").val();
-        var docImg = $("input[name='docImg']").val();
-        var docUrl = $("input[name='docUrl']").val();
-        var docSort = $("input[name='docSort']").val();
-        var docStatus = $("input[id='status']").is(':checked') == true ? 0 : 1;
-        var remark = $("input[name='remark']").val();
+        var tagsInput = $(".tag-input");
+        var len = tagsInput.length;
+        var tagsId = "";
+        for (var i = 0; i < len; i++) {
+            if (tagsInput[i].checked)
+                tagsId = tagsId.concat(tagsInput[i].value).concat(",")
+        }
+        if (tagsId.length > 0) {
+            tagsId = tagsId.substr(0, tagsId.length - 1)
+        }
+        var formData = new FormData();
+        formData.append("docName", $("input[name='docName']").val());
+        formData.append("docType", $("input[name='docType']").val());
+        formData.append("docImg", document.getElementById("fileInputImg").files[0]);
+        formData.append("docUrl", document.getElementById("doc").files[0]);
+        formData.append("docSort", $("input[name='docSort']").val());
+        formData.append("docStatus", $("input[id='status']").is(':checked') === true ? 0 : 1);
+        formData.append("remark", $("input[name='remark']").val());
+        formData.append("tags", tagsId);
         $.ajax({
             cache: true,
             type: "POST",
+            dataType: "json",
             url: ctx + "lib/doc/add",
-            data: {
-                "docName": docName,
-                "docType": docType,
-                "docImg": docImg,
-                "docUrl": docUrl,
-                "docSort": docSort,
-                "docStatus": docStatus,
-                "remark": remark,
-            },
+            data: formData,
             async: false,
+            processData: false,		//用于对data参数进行序列化处理 这里必须false
+            contentType: false, 	//必须
             error: function (request) {
                 $.modal.alertError("系统错误");
             },
@@ -242,13 +237,14 @@
                 },
                 success: function (data) {
                     var label = "<label class=\"checkbox-inline\">\n" +
-                        "<input type=\"checkbox\" checked='true' value=\"" + data.data.tagId + "\" id=\"inlineCheckbox1\">" + data.data.tagName + "</label>";
+                        "<input type=\"checkbox\" class='tag-input' checked='true' value=\"" + data.data.tagId + "\" id=\"inlineCheckbox1\">" + data.data.tagName + "</label>";
                     $("#tag-label-list").append(label);
                     $("#add-tag").val('')
                 }
             });
         }
     }
+
 </script>
 <style type="text/css">
     .addBtn {

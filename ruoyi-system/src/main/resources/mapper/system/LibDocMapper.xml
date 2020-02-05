@@ -54,7 +54,7 @@
 
     <select id="checkDocNameUnique" parameterType="String" resultMap="LibDocResult">
         <include refid="selectDocVo"/>
-        where r.doc_name=#{docName}
+        where r.del_flag = '0' and r.doc_name=#{docName}
     </select>
 
     <select id="selectDocById" parameterType="Long" resultMap="LibDocResult">

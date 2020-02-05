@@ -28,7 +28,7 @@ public interface LibDocTagMapper {
      * @param doc 文档
      * @return int
      */
-    int insertDocTag(LibDoc doc);
+    int insertDocTag(LibDocTag doc);
 
     /**
      * 根据文档id查询文档

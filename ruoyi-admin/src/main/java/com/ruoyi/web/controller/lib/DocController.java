@@ -1,24 +1,32 @@
 package com.ruoyi.web.controller.lib;
 
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.Global;
+import com.ruoyi.common.config.ServerConfig;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.LibDoc;
+import com.ruoyi.system.domain.LibDocModel;
 import com.ruoyi.system.domain.LibTag;
 import com.ruoyi.system.service.ILibDocService;
+import com.ruoyi.system.service.ILibDocTagService;
 import com.ruoyi.system.service.ILibTagService;
 import lombok.Data;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,11 +46,15 @@ public class DocController extends BaseController {
     private static String PREFIX = "/lib/doc";
     private final ILibDocService libDocService;
     private final ILibTagService libTagService;
+    private final ILibDocTagService iLibDocTagService;
+    @Autowired
+    private ServerConfig serverConfig;
 
     @Autowired
-    public DocController(ILibDocService libDocService, ILibTagService libTagService) {
+    public DocController(ILibDocService libDocService, ILibTagService libTagService, ILibDocTagService iLibDocTagService) {
         this.libDocService = libDocService;
         this.libTagService = libTagService;
+        this.iLibDocTagService = iLibDocTagService;
     }
 
     @RequiresPermissions("lib:doc:view")
@@ -77,13 +89,31 @@ public class DocController extends BaseController {
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(@Validated LibDoc doc) {
-        if (UserConstants.ROLE_NAME_NOT_UNIQUE.equals(libDocService.checkDocNameUnique(doc))) {
-            return error("新增文档'" + doc.getDocName() + "'失败，文档名称已存在");
+    @Transactional
+    public AjaxResult addSave(@Validated LibDocModel docModel) {
+        LibDoc libDoc = new LibDoc();
+        libDoc.setDocName(docModel.getDocName());
+        if (UserConstants.ROLE_NAME_NOT_UNIQUE.equals(libDocService.checkDocNameUnique(libDoc))) {
+            return error("新增文档'" + libDoc.getDocName() + "'失败，文档名称已存在");
         }
-        doc.setCreateBy(ShiroUtils.getLoginName());
+        libDoc.setCreateBy(ShiroUtils.getLoginName());
+        libDoc.setDelFlag(docModel.getDelFlag());
+        libDoc.setDocSort(docModel.getDocSort());
+        String filePath = Global.getUploadPath();
+        final String tags = docModel.getTags();
+        // 上传并返回新文件名称
+        try {
+            String docImg = FileUploadUtils.upload(filePath, docModel.getDocImg());
+            libDoc.setDocImg(serverConfig.getUrl() + File.separator + docImg);
+            String doc = FileUploadUtils.upload(filePath, docModel.getDocUrl());
+            libDoc.setDocUrl(serverConfig.getUrl() + File.separator + doc);
+        } catch (IOException e) {
+            return AjaxResult.error(e.getMessage());
+        }
         ShiroUtils.clearCachedAuthorizationInfo();
-        return toAjax(libDocService.insertDoc(doc));
+        final int rows = libDocService.insertDoc(libDoc);
+        iLibDocTagService.addTags(tags, libDoc.getDocId());
+        return toAjax(rows);
 
     }
 
@@ -176,7 +206,9 @@ public class DocController extends BaseController {
     @ResponseBody
     public AjaxResult tagModel() {
         AjaxResult ajax = new AjaxResult();
-        final List<LibTag> libTags = libTagService.selectTagList(new LibTag());
+        final LibTag query = new LibTag();
+        query.setTagStatus("0");
+        final List<LibTag> libTags = libTagService.selectTagList(query);
         List<TagFormModel> tagModes = new LinkedList<>();
         libTags.forEach(tag -> {
             tagModes.add(new TagFormModel(tag.getTagId(), tag.getTagName()));
