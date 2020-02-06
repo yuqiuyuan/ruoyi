@@ -29,4 +29,12 @@ public class LibDocTag {
      * 更新时间
      */
     private Date updateTime;
+    /**
+     * 删除标识
+     */
+    private String delFlag;
+    /**
+     * 更新人
+     */
+    private String updateBy;
 }

@@ -25,6 +25,12 @@
         from sys_tag r
     </sql>
 
+    <!--<sql id="selectTag2ContactVo">-->
+    <!--select r.tag_id, r.tag_name, r.tag_key, r.tag_sort, r.data_scope,-->
+    <!--r.tag_status, r.del_flag, r.create_time, r.remark-->
+    <!--from sys_tag r left join sys_doc_tag d on r.tag_id = d.tag_id-->
+    <!--</sql>-->
+
     <sql id="selectTagVo">
 		select r.tag_id, r.tag_name, r.tag_key, r.tag_sort, r.data_scope, r.tag_status, r.del_flag, r.create_time, r.remark
         from sys_tag r
@@ -57,9 +63,7 @@
 
     <select id="selectTagListByDocId" parameterType="Long" resultMap="LibTagResult">
         <include refid="selectTagContactVo"/>
-        where r.del_flag = '0' and r.tag_id in (select tag_id from sys_doc_tag where doc_id=#{docId})
-        <!-- 数据范围过滤 -->
-        ${params.dataScope}
+        where r.del_flag = '0' and r.tag_id in (select tag_id from sys_doc_tag where del_flag = '0' and doc_id=#{docId})
     </select>
 
     <select id="checkTagNameUnique" parameterType="String" resultMap="LibTagResult">

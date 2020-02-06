@@ -47,8 +47,8 @@ public class LibDocServiceImpl implements ILibDocService {
     }
 
     @Override
-    public LibDoc selectDocById(Long DocId) {
-        return libDocMapper.selectDocById(DocId);
+    public LibDoc selectDocById(Long docId) {
+        return libDocMapper.selectDocById(docId);
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.LibDoc;
 import com.ruoyi.system.domain.LibDocModel;
+import com.ruoyi.system.domain.LibDocTag;
 import com.ruoyi.system.domain.LibTag;
 import com.ruoyi.system.service.ILibDocService;
 import com.ruoyi.system.service.ILibDocTagService;
@@ -91,15 +92,10 @@ public class DocController extends BaseController {
     @ResponseBody
     @Transactional
     public AjaxResult addSave(@Validated LibDocModel docModel) {
-        LibDoc libDoc = new LibDoc();
-        libDoc.setDocName(docModel.getDocName());
+        LibDoc libDoc = generateLibDocByModel(docModel);
         if (UserConstants.ROLE_NAME_NOT_UNIQUE.equals(libDocService.checkDocNameUnique(libDoc))) {
             return error("新增文档'" + libDoc.getDocName() + "'失败，文档名称已存在");
         }
-        libDoc.setCreateBy(ShiroUtils.getLoginName());
-        libDoc.setDelFlag(docModel.getDelFlag());
-        libDoc.setDocSort(docModel.getDocSort());
-        libDoc.setDocType(docModel.getDocType());
         String filePath = Global.getUploadPath();
         final String tags = docModel.getTags();
         // 上传并返回新文件名称
@@ -117,6 +113,7 @@ public class DocController extends BaseController {
         return toAjax(rows);
 
     }
+
 
     /**
      * 新增保存文档
@@ -168,13 +165,28 @@ public class DocController extends BaseController {
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(@Validated LibDoc doc) {
-        if (UserConstants.ROLE_NAME_NOT_UNIQUE.equals(libDocService.checkDocNameUnique(doc))) {
-            return error("修改文档'" + doc.getDocName() + "'失败，文档名称已存在");
+    @Transactional
+    public AjaxResult editSave(@Validated LibDocModel docModel) throws IOException {
+        final LibDoc beforeDoc = libDocService.selectDocById(docModel.getDocId());
+        LibDoc doc = generateLibDocByModel(docModel);
+        // 当文档名称发生改变的时候，校验文档名称的唯一性
+        if (!beforeDoc.getDocName().equals(docModel.getDocName()) && UserConstants.ROLE_NAME_NOT_UNIQUE.equals(libDocService.checkDocNameUnique(doc))) {
+            return error("修改文档'" + docModel.getDocName() + "'失败，文档名称已存在");
         }
-        doc.setUpdateBy(ShiroUtils.getLoginName());
-        ShiroUtils.clearCachedAuthorizationInfo();
-        return toAjax(libDocService.updateDoc(doc));
+        if (null != docModel.getDocImg()) {
+            String filePath = Global.getUploadPath();
+            String docImg = FileUploadUtils.upload(filePath, docModel.getDocImg());
+            doc.setDocImg(serverConfig.getUrl() + File.separator + docImg);
+        }
+        if (libDocService.updateDoc(doc) > 0) {
+            LibDocTag libDocTag = new LibDocTag();
+            libDocTag.setUpdateBy(ShiroUtils.getLoginName());
+            libDocTag.setDocId(docModel.getDocId());
+            final List<LibDocTag> libDocTags = iLibDocTagService.selectByDocId(doc.getDocId());
+            iLibDocTagService.updateDocTags(libDocTags, docModel.getTags(), doc.getDocId(), ShiroUtils.getLoginName());
+            ShiroUtils.clearCachedAuthorizationInfo();
+        }
+        return AjaxResult.success();
     }
 
     /**
@@ -217,6 +229,25 @@ public class DocController extends BaseController {
         ajax.put("code", 200);
         ajax.put("value", tagModes);
         return ajax;
+    }
+
+//    ********************************私有方法***************************************
+
+    /**
+     * 根据模型生成实体
+     *
+     * @param docModel 文档对象展示模型
+     * @return 文档对象实体
+     */
+    private LibDoc generateLibDocByModel(@Validated LibDocModel docModel) {
+        LibDoc libDoc = new LibDoc();
+        libDoc.setDocId(docModel.getDocId());
+        libDoc.setDocName(docModel.getDocName());
+        libDoc.setCreateBy(ShiroUtils.getLoginName());
+        libDoc.setDelFlag(docModel.getDelFlag());
+        libDoc.setDocSort(docModel.getDocSort());
+        libDoc.setDocType(docModel.getDocType());
+        return libDoc;
     }
 
 }
