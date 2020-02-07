@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('文档列表')"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -58,7 +59,32 @@
         </div>
     </div>
 </div>
+
+<!-- 弹出框 start -->
+<div class="wrapper wrapper-content animated fadeInRight" style="display: none">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>文件上传控件
+                        <small>https://github.com/kartik-v/bootstrap-fileinput</small>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-group">
+                        <label class="font-noraml">多文件上传</label>
+                        <div class="file-loading">
+                            <input id="fileinput-demo-1" type="file" multiple>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 弹出框 end -->
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('lib:doc:edit')}]];
     var removeFlag = [[${@permission.hasPermi('lib:doc:remove')}]];
@@ -70,6 +96,7 @@
             url: prefix + "/list",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
+            viewUrl: prefix + "/view/{id}",
             removeUrl: prefix + "/remove",
             sortName: "docSort",
             modalName: "文档",
@@ -124,6 +151,7 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="view2(\'' + row.docUrl + '\')"><i class="fa fa-edit"></i>预览</a> ');
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.docId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.docId + '\')"><i class="fa fa-remove"></i>删除</a> ');
                         return actions.join('');
@@ -156,6 +184,21 @@
             $.operate.post(prefix + "/changeStatus", {"docId": docId, "docStatus": 0});
         })
     }
+
+    function view2(docUrl) {
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '#',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreviewFileType: 'pdf',
+            initialPreview: [
+                docUrl
+            ]
+        });
+        $(".kv-file-zoom.btn.btn-sm.btn-kv.btn-default.btn-outline-secondary").click()
+    }
+
 </script>
 </body>
 </html>
