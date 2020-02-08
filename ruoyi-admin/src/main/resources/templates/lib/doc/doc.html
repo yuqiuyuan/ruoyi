@@ -61,26 +61,8 @@
 </div>
 
 <!-- 弹出框 start -->
-<div class="wrapper wrapper-content animated fadeInRight" style="display: none">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>文件上传控件
-                        <small>https://github.com/kartik-v/bootstrap-fileinput</small>
-                    </h5>
-                </div>
-                <div class="ibox-content">
-                    <div class="form-group">
-                        <label class="font-noraml">多文件上传</label>
-                        <div class="file-loading">
-                            <input id="fileinput-demo-1" type="file" multiple>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="wrapper wrapper-content animated fadeInRight" style="display: none" id="file-dialog">
+
 </div>
 <!-- 弹出框 end -->
 <th:block th:include="include :: footer"/>
@@ -186,10 +168,26 @@
     }
 
     function view2(docUrl) {
+
+        $("#file-dialog").html("<div class=\"row\">\n" +
+            "        <div class=\"col-sm-12\">\n" +
+            "            <div class=\"ibox float-e-margins\">\n" +
+            "                <div class=\"ibox-content\">\n" +
+            "                    <div class=\"form-group\">\n" +
+            "                        <label class=\"font-noraml\">多文件上传</label>\n" +
+            "                        <div class=\"file-loading\">\n" +
+            "                            <input id=\"fileinput-demo-1\" type=\"file\" multiple>\n" +
+            "                        </div>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "    </div>");
+
         $("#fileinput-demo-1").fileinput({
             'theme': 'explorer-fas',
             'uploadUrl': '#',
-            overwriteInitial: false,
+            // overwriteInitial: true,
             initialPreviewAsData: true,
             initialPreviewFileType: 'pdf',
             initialPreview: [
