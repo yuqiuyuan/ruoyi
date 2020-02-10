@@ -2,25 +2,12 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-    <script>
-        var picture_image_path_v1 = "https://st.douding.cn";
-        var urlPrefix = new function () {
-            this.www = 'https://www.docin.com';
-            this.cdn = 'https://st.douding.cn';
-            this.manhua = 'https://manhua.docin.com'
-        };</script>
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta content="telephone=no" name="format-detection">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
     <th:block th:include="include :: brows-h5-css"/>
     <th:block th:include="include :: brows-h5-js"/>
-    <script>
-        (window._ssp_global = window._ssp_global || {}).userConfig = {
-            domain: "fpb.docin.com"
-        }
-    </script>
 
     <style>
         #sections a[id^="pro"] {
@@ -31,43 +18,6 @@
 </head>
 
 <body>
-<div id="menu" class="mm-menu mm-horizontal mm-ismenu" style="display: none">
-    <div class="menuWarp mm-panel mm-opened mm-current" id="mm-m0-p0">
-        <div class="loginBar">
-            <div class="user_pic">
-                <img src="../../img/h5/user_loginout.png">
-            </div>
-            <div class="user_login_info">
-                <div class="user_name">您还没有登录</div>
-                <div class="user_amount">
-                    <a class="ui_btn ui_btn_blue" href="javascript:showLogin(null, 1);"
-                       onmousedown="return inpmv(4985);">登录</a>
-                    <a class="ui_btn ui_btn_blue" href="javascript:showRegister();"
-                       onmousedown="return inpmv(4986);">注册</a>
-                </div>
-            </div>
-        </div>
-        <div class="subscribWrap">
-            <nav class="minNav" style="display: none">
-                <a href="https://www.docin.com/touch_new/index.do" target="_self" onmousedown="return inpmv(4972);"
-                   class="cur"><span class="ui_ico ui_index"></span>首页</a>
-                <a href="https://www.docin.com/touch_new/mysub.do" target="_self"
-                   onmousedown="return inpmv(5119);"><span class="ui_ico ui_topic"></span>用户相关</a>
-                <a href="https://www.docin.com/touch_new/bookhouse.do" target="_self" onmousedown="return inpmv(4983);"><span
-                        class="ui_ico ui_bookshop"></span>用户相关</a>
-                <a href="https://www.docin.com/touchPay/myDocin.do" target="_self"
-                   onmousedown="return inpmv(4983);"><span class="ui_ico ui_mydocin"></span>用户相关</a>
-                <a href="https://www.docin.com/touch_new/mytopics.do" target="_self" onmousedown=""><span
-                        class="ui_ico ui_topic"></span>用户相关</a>
-            </nav>
-
-            <dl id="userTagDataDiv" class="mySubscrib">
-                <dd><a href="https://www.docin.com/touch_new/subscribe.do" target="_self"
-                       onmousedown="return inpmv(5120);"><span class="ui_ico ui_set"></span>添加订阅频道</a></dd>
-            </dl>
-        </div>
-    </div>
-</div>
 <script language="JavaScript">
     if (window != top)
         top.location.href = location.href;
@@ -94,58 +44,17 @@
                 <div class="nav-slider">
                     <ul>
                         <li>
-                            <a href="https://www.docin.com/touch_new/category1.do" title="分类"
-                               onmousedown="return inpmv(6143);">分类</a>
+                            <a href="#" th:each="tag:${tagList}" title="分类"
+                               onmousedown="return inpmv(6143);">
+                                <text th:text="${tag.tagName}"></text>
+                            </a>
+                            <a href="#" th:each="tag:${tagList}" title="分类"
+                               onmousedown="return inpmv(6143);">
+                                <text th:text="${tag.tagName}"></text>
+                            </a>
                         </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_new/build/index.do" title="建筑"
-                               onmousedown="return inpmv(6144);">建筑</a>
-                        </li>
-                        <li>
-                            <a href="http://ke.docin.com/touch/index" title="课堂" onmousedown="return inpmv(6988);"
-                               class="hot">课堂</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_new/touchkyzqindex.do" title="考研"
-                               onmousedown="return inpmv(6146);">考研</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_new/minicaseIndex.do" title="微案例"
-                               onmousedown="return inpmv(6145);">微案例</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_new/topic_index.do" title="专题"
-                               onmousedown="return inpmv(6142);">专题</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_new/touchMedicalIndex.do" title="医疗">医疗</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_comic/index.do" title="漫画"
-                               onmousedown="return inpmv(6604);">漫画</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_new/novel_index.do" title="小说"
-                               onmousedown="return inpmv(6138);">小说</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_new/daily_index.do" title="日报"
-                               onmousedown="return inpmv(6136);">日报</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_new/mysub.do" title="订阅"
-                               onmousedown="return inpmv(6140);">订阅</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/jsp_cn/touchPay/touch_fin.jsp" title="充值"
-                               onmousedown="return inpmv(6141);">充值</a>
-                        </li>
-                        <li>
-                            <a href="https://www.docin.com/touch_new/mymenu.do" title="我的"
-                               onmousedown="return inpmv(6147);">我的</a>
-                        </li>
-                        <li>
-                            <a href="http://t.cn/S4rUG6" title="APP" onmousedown="return inpmv(6146);">APP</a>
+
+                        <li style="display: none">
                         </li>
                     </ul>
                 </div>
@@ -171,83 +80,11 @@
         </div>
         <div class="m-channel-items">
             <section class="m-channel-list">
-                <a href="https://www.docin.com/touch_new/category1.do" class="m-list-link" title="分类"
-                   onmousedown="return inpmv(6591);">
-                    <i class="channel-list-ico ico-list-fenlei"></i>
-                    <span class="m-list-info">分类</span>
-                </a>
-                <a href="https://www.docin.com/touch_new/topic_index.do" class="m-list-link" title="专题"
-                   onmousedown="return inpmv(6592);">
-                    <i class="channel-list-ico ico-list-zhuanti"></i>
-                    <span class="m-list-info">专题</span>
-                </a>
-                <!-- 判断 -->
-                <a href="https://www.docin.com/touchPay/touch_vip.do" class="m-list-link" title="VIP"
-                   onmousedown="return inpmv(6774);">
-                    <i class="channel-list-ico ico-list-build-or-vip"></i>
-                    <span class="m-list-info">VIP</span>
-                </a>
-            </section>
-            <section class="m-channel-list">
-                <a href="https://www.docin.com/touch_new/build/index.do" class="m-list-link" title="建筑"
+                <a href="#" th:each="tag:${tagList}" class="m-list-link"
+                   th:title="${tag.tagName}"
                    onmousedown="return inpmv(6594);">
                     <i class="channel-list-ico ico-list-jianzhu"></i>
-                    <span class="m-list-info">建筑</span>
-                </a>
-                <a href="http://ke.docin.com/touch/index" class="m-list-link hot" title="课堂"
-                   onmousedown="return inpmv(6988);">
-                    <i class="channel-list-ico ico-list-ketang"></i>
-                    <span class="m-list-info">课堂</span>
-                </a>
-                <a href="https://www.docin.com/touch_new/minicaseIndex.do" class="m-list-link" title="微案例"
-                   onmousedown="return inpmv(6595);">
-                    <i class="channel-list-ico ico-list-wal"></i>
-                    <span class="m-list-info">微案例</span>
-                </a>
-                <a href="https://www.docin.com/touch_new/touchkyzqindex.do" class="m-list-link" title="考研"
-                   onmousedown="return inpmv(6596);">
-                    <i class="channel-list-ico ico-list-kaoyan"></i>
-                    <span class="m-list-info">考研</span>
-                </a>
-                <a href="https://www.docin.com/touch_new/touchMedicalIndex.do" class="m-list-link" title="医疗">
-                    <i class="channel-list-ico ico-list-yiliao"></i>
-                    <span class="m-list-info">医疗</span>
-                </a>
-                <a href="https://www.docin.com/touch_new/daily_index.do" class="m-list-link" title="日报"
-                   onmousedown="return inpmv(6597);">
-                    <i class="channel-list-ico ico-list-daily"></i>
-                    <span class="m-list-info">日报</span>
-                </a>
-                <a href="https://www.docin.com/touch_comic/index.do" class="m-list-link" title="漫画"
-                   onmousedown="return inpmv(6598);">
-                    <i class="channel-list-ico ico-list-manhua"></i>
-                    <span class="m-list-info">漫画</span>
-                </a>
-                <a href="https://www.docin.com/touch_new/novel_index.do" class="m-list-link" title="小说"
-                   onmousedown="return inpmv(6599);">
-                    <i class="channel-list-ico ico-list-nove"></i>
-                    <span class="m-list-info">小说</span>
-                </a>
-            </section>
-            <section class="m-channel-list">
-                <a href="https://www.docin.com/touch_new/mymenu.do" class="m-list-link" title="我的"
-                   onmousedown="return inpmv(6600);">
-                    <i class="channel-list-ico ico-list-mine"></i>
-                    <span class="m-list-info">我的</span>
-                </a>
-                <a href="https://www.docin.com/jsp_cn/touchPay/touch_fin.jsp" class="m-list-link" title="充值"
-                   onmousedown="return inpmv(6601);">
-                    <i class="channel-list-ico ico-list-chongzhi"></i>
-                    <span class="m-list-info">充值</span>
-                </a>
-                <a href="https://www.docin.com/touch_new/mysub.do" class="m-list-link" title="订阅"
-                   onmousedown="return inpmv(6602);">
-                    <i class="channel-list-ico ico-list-dingyue"></i>
-                    <span class="m-list-info">订阅</span>
-                </a>
-                <a href="http://t.cn/S4rUG6" class="m-list-link" title="APP下载" onmousedown="return inpmv(6593);">
-                    <i class="channel-list-ico ico-list-app"></i>
-                    <span class="m-list-info">下载App</span>
+                    <span class="m-list-info" th:text="${tag.tagName}"></span>
                 </a>
             </section>
         </div>
@@ -261,176 +98,34 @@
         <!-- 推荐的文档-->
         <div id="sections">
             <a id="pro536912735"
-               href="javascript:skip(&#39;https://www.docin.com/touch_new/preview_new.do?id=536912735&amp;from=index&#39;)"
-               onmousedown="return inpmv(4988);" target="_self">
-
+               href="javascript:skip(#)"
+               onmousedown="return inpmv(4988);" target="_self" th:each="doc:${docList}">
                 <dl class="clear">
                     <dt>
                         <div class="bookPic">
-                            <img alt="数码单反摄影100个摄影技巧" th:docsrc="@{/img/profile_110x140.png}"
-                                 th:src="@{/img/profile_110x140.png}">
-                            <span class="bookPage">39</span>
+                            <img th:alt="${doc.docImg}"
+                                 th:src="${doc.docImg}">
                         </div>
                     </dt>
-                    <dd class="bookTitle">数码单反摄影100个摄影技巧</dd>
+                    <dd class="bookTitle">
+                        <text th:text="${doc.docName}"></text>
+                    </dd>
                     <dd><span class="fch">精品文档<br>
-							 上传人:美尘世界</span></dd>
-                    <dd>23673次阅读 &nbsp;pdf</dd>
+							 上传人:<text th:text="${doc.createBy}"></text></span></dd>
+                    <dd>
+                        <text th:text="${doc.scanCount}"></text>
+                        次阅读 &nbsp;<text th:text="${doc.docType}"></text>
+                    </dd>
                 </dl>
             </a>
 
-            <a id="pro2288708546"
-               href="javascript:skip(&#39;https://www.docin.com/touch_new/preview_new.do?id=2288708546&amp;from=index&#39;)"
-               onmousedown="return inpmv(4988);" target="_self">
-
-                <dl class="clear">
-                    <dt>
-                        <div class="bookPic">
-                            <img alt="应急物资管理制度" th:docsrc="@{/img/profile_110x140.png}"
-                                 th:src="@{/img/profile_110x140.png}">
-                            <span class="bookPage">6</span>
-                        </div>
-                    </dt>
-                    <dd class="bookTitle">应急物资管理制度</dd>
-                    <dd><span class="fch">精品文档<br>
-							 上传人:飞翔网络科技有限公司</span></dd>
-                    <dd>2661次阅读 &nbsp;doc</dd>
-                </dl>
-            </a>
-            <a id="pro753957341"
-               href="javascript:skip(&#39;https://www.docin.com/touch_new/preview_new.do?id=753957341&amp;from=index&#39;)"
-               onmousedown="return inpmv(4988);" target="_self">
-
-                <dl class="clear">
-                    <dt>
-                        <div class="bookPic">
-                            <img alt="成语大全带解释" th:docsrc="@{/img/profile_110x140.png}"
-                                 th:src="@{/img/profile_110x140.png}">
-                            <span class="bookPage">11</span>
-                        </div>
-                    </dt>
-                    <dd class="bookTitle">成语大全带解释</dd>
-                    <dd><span class="fch">精品文档<br>
-							 上传人:机器猫</span></dd>
-                    <dd>23707次阅读 &nbsp;doc</dd>
-                </dl>
-            </a>
-            <a id="pro1591180366"
-               href="javascript:skip(&#39;https://www.docin.com/touch_new/preview_new.do?id=1591180366&amp;from=index&#39;)"
-               onmousedown="return inpmv(4988);" target="_self">
-
-                <dl class="clear">
-                    <dt>
-                        <div class="bookPic">
-                            <img alt="二级以上综合医院发热门诊设置标准" th:docsrc="@{/img/profile_110x140.png}"
-                                 th:src="@{/img/profile_110x140.png}">
-                            <span class="bookPage">5</span>
-                        </div>
-                    </dt>
-                    <dd class="bookTitle">二级以上综合医院发热门诊设置标准</dd>
-                    <dd><span class="fch">精品文档<br>
-							 上传人:xspfon69</span></dd>
-                    <dd>4515次阅读 &nbsp;doc</dd>
-                </dl>
-            </a>
-            <a id="pro631018730"
-               href="javascript:skip(&#39;https://www.docin.com/touch_new/preview_new.do?id=631018730&amp;from=index&#39;)"
-               onmousedown="return inpmv(4988);" target="_self">
-
-                <dl class="clear">
-                    <dt>
-                        <div class="bookPic">
-                            <img alt="乡镇传染病疫情应急预案" th:docsrc="@{/img/profile_110x140.png}"
-                                 th:src="@{/img/profile_110x140.png}">
-                            <span class="bookPage">5</span>
-                        </div>
-                    </dt>
-                    <dd class="bookTitle">乡镇传染病疫情应急预案</dd>
-                    <dd><span class="fch">精品文档<br>
-							 上传人:玉无瑕</span></dd>
-                    <dd>4758次阅读 &nbsp;doc</dd>
-                </dl>
-            </a>
-            <a id="pro2299630491"
-               href="javascript:skip(&#39;https://www.docin.com/touch_new/preview_new.do?id=2299630491&amp;from=index&#39;)"
-               onmousedown="return inpmv(4988);" target="_self">
-
-                <dl class="clear">
-                    <dt>
-                        <div class="bookPic">
-                            <img alt="学校预防传染病应急预案" th:docsrc="@{/img/profile_110x140.png}"
-                                 th:src="@{/img/profile_110x140.png}">
-                            <span class="bookPage">2</span>
-                        </div>
-                    </dt>
-                    <dd class="bookTitle">学校预防传染病应急预案</dd>
-                    <dd><span class="fch">精品文档<br>
-							 上传人:byqhpa79</span></dd>
-                    <dd>3487次阅读 &nbsp;doc</dd>
-                </dl>
-            </a>
-            <a id="pro719683462"
-               href="javascript:skip(&#39;https://www.docin.com/touch_new/preview_new.do?id=719683462&amp;from=index&#39;)"
-               onmousedown="return inpmv(4988);" target="_self">
-
-                <dl class="clear">
-                    <dt>
-                        <div class="bookPic">
-                            <img alt="25种动物隐身术 消失于无形 摄影精选" th:docsrc="@{/img/profile_110x140.png}"
-                                 th:src="@{/img/profile_110x140.png}">
-                            <span class="bookPage">17</span>
-                        </div>
-                    </dt>
-                    <dd class="bookTitle">25种动物隐身术 消失于无形 摄影精选</dd>
-                    <dd><span class="fch">精品文档<br>
-							 上传人:神州娱记</span></dd>
-                    <dd>6544次阅读 &nbsp;doc</dd>
-                </dl>
-            </a>
-            <a id="pro714158731"
-               href="javascript:skip(&#39;https://www.docin.com/touch_new/preview_new.do?id=714158731&amp;from=index&#39;)"
-               onmousedown="return inpmv(4988);" target="_self">
-
-                <dl class="clear">
-                    <dt>
-                        <div class="bookPic">
-                            <img alt="揭秘24种动物的笑 动物比人更会笑 摄影组图"
-                                 th:docsrc="@{/img/profile_110x140.png}"
-                                 th:src="@{/img/profile_110x140.png}">
-                            <span class="bookPage">24</span>
-                        </div>
-                    </dt>
-                    <dd class="bookTitle">揭秘24种动物的笑 动物比人更会笑 摄影组图</dd>
-                    <dd><span class="fch">精品文档<br>
-							 上传人:神州娱记</span></dd>
-                    <dd>2914次阅读 &nbsp;doc</dd>
-                </dl>
-            </a>
-            <a id="pro700786009"
-               href="javascript:skip(&#39;https://www.docin.com/touch_new/preview_new.do?id=700786009&amp;from=index&#39;)"
-               onmousedown="return inpmv(4988);" target="_self">
-
-                <dl class="clear">
-                    <dt>
-                        <div class="bookPic">
-                            <img alt="电影剪辑常用技巧手法" th:docsrc="@{/img/profile_110x140.png}"
-                                 th:src="@{/img/profile_110x140.png}">
-                            <span class="bookPage">11</span>
-                        </div>
-                    </dt>
-                    <dd class="bookTitle">电影剪辑常用技巧手法</dd>
-                    <dd><span class="fch">精品文档<br>
-							 上传人:神州娱记</span></dd>
-                    <dd>17611次阅读 &nbsp;doc</dd>
-                </dl>
-            </a>
 
         </div>
         <div class="toLogin"><span>没看过瘾？点击这里 阅读更多精彩内容</span></div>
     </div>
     <div style="height:32px;line-height:32px;text-align:center;font-size:12px;color:#bbb;padding-bottom:5px;">
         ©drebander.top
-        <a style="color:#bbb;text-decoration:underline;" href="https://www.docin.com/jsp_cn/docin/yyzz.jsp"
+        <a style="color:#bbb;text-decoration:underline;" href="#"
            target="_blank">山园</a></div>
     <!-- 菜单页 -->
     <!--
@@ -547,7 +242,7 @@ usrTagDatas： 用户定制信息
 </script>
 <script>
     var currentIndex = 2;
-    var totalPage = 112;
+    var totalPage = 50;
     jQuery(function () {
         jQuery('div#menu').mmenu();
         hideURLbar();//隐藏地址栏
@@ -672,31 +367,7 @@ usrTagDatas： 用户定制信息
         }
     }
 
-    jQuery(function () {
-        if (jQuery("#closeJdhd").length > 0) {
-            jQuery("#closeJdhd").bind("touchend", function () {
-                var exp = new Date();
-                exp.setTime(exp.getTime() + 30 * 24 * 60 * 60 * 1000);
-                document.cookie = "touch_jd_active=1;expires=" + exp.toGMTString() + ";path=/; domain=.docin.com";
-                jQuery(".jd_hd").fadeOut();
-            });
-        }
-        // 肺炎公益广告
-        var adsDate = new Date(),
-            adsTime = localStorage.getItem('adsTime'),
-            nowTime = adsDate.getMonth() + 1 + '-' + adsDate.getDate();
-        if (adsTime != null && adsTime == nowTime) {
-            jQuery('#tempAds').hide();
-        } else {
-            jQuery('#tempAds').show();
-            jQuery('.closetempAds').off('click').on('click', function (event) {
-                event.preventDefault();
-                jQuery('#tempAds').hide();
-                localStorage.setItem('adsTime', adsDate.getMonth() + 1 + '-' + adsDate.getDate());
-            })
-        }
-    });
-    //window.addEventListener('load', loadMore, false);
+    window.addEventListener('load', loadMore, false);
 </script>
 
 
