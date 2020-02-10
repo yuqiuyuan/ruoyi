@@ -134,7 +134,7 @@ body {
 }
 
 .headerBg {
-    background: url(../../img/h5/Blue_Star_bg.jpg?rand=20190702) 0 0 no-repeat;
+    /*background: url(../../img/h5/Blue_Star_bg.jpg?rand=20190702) 0 0 no-repeat; 2f76b8*/
     background-size: cover;
 }
 
