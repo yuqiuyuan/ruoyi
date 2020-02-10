@@ -44,7 +44,7 @@ import java.util.Map;
 @RequestMapping("/lib/doc")
 public class DocController extends BaseController {
 
-    private static String PREFIX = "/lib/doc";
+    private static String PREFIX = "lib/doc";
     private final ILibDocService libDocService;
     private final ILibTagService libTagService;
     private final ILibDocTagService iLibDocTagService;

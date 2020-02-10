@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/lib/browse")
 public class BrowseController extends BaseController {
 
-    private static String PREFIX = "/lib/browse";
+    private static String PREFIX = "lib/browse";
     private final ILibTagService libTagService;
     private final ILibDocService libDocService;
 

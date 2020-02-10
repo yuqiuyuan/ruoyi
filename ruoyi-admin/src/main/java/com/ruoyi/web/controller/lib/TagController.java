@@ -29,7 +29,7 @@ import java.util.List;
 @RequestMapping("/lib/tag")
 public class TagController extends BaseController {
 
-    private static String PREFIX = "/lib/tag";
+    private static String PREFIX = "lib/tag";
     private final ILibTagService libTagService;
 
     @Autowired
