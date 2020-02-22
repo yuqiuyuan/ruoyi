@@ -17,6 +17,7 @@ import com.ruoyi.system.domain.LibTag;
 import com.ruoyi.system.service.ILibDocService;
 import com.ruoyi.system.service.ILibDocTagService;
 import com.ruoyi.system.service.ILibTagService;
+import com.ruoyi.web.core.PdfHelper;
 import lombok.Data;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,10 +101,16 @@ public class DocController extends BaseController {
         final String tags = docModel.getTags();
         // 上传并返回新文件名称
         try {
-            String docImg = FileUploadUtils.upload(filePath, docModel.getDocImg());
-            libDoc.setDocImg(serverConfig.getUrl() + File.separator + docImg);
             String doc = FileUploadUtils.upload(filePath, docModel.getDocUrl());
             libDoc.setDocUrl(serverConfig.getUrl() + File.separator + doc);
+            if (null != docModel.getDocImg()) {
+                String docImg = FileUploadUtils.upload(filePath, docModel.getDocImg());
+                libDoc.setDocImg(serverConfig.getUrl() + File.separator + docImg);
+            } else {
+                final String docImg = PdfHelper.pdfToImagePath(doc.replace("/profile/upload", ""));
+                libDoc.setDocImg(serverConfig.getUrl() + File.separator + "profile/upload" + docImg);
+            }
+
         } catch (IOException e) {
             return AjaxResult.error(e.getMessage());
         }

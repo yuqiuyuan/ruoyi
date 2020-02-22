@@ -73,6 +73,7 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+
     </dependencies>
 
     <build>

@@ -181,7 +181,9 @@
         var formData = new FormData();
         formData.append("docName", $("input[name='docName']").val());
         formData.append("docType", $("input[name='docType']").val());
-        formData.append("docImg", document.getElementById("fileInputImg").files[0]);
+        if (document.getElementById("fileInputImg").files[0]) {
+            formData.append("docImg", document.getElementById("fileInputImg").files[0]);
+        }
         formData.append("docUrl", document.getElementById("doc").files[0]);
         formData.append("docSort", $("input[name='docSort']").val());
         formData.append("docStatus", $("input[id='status']").is(':checked') === true ? 0 : 1);
