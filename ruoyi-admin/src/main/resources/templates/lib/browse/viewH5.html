@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('文件上传')"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+</head>
+<body class="gray-bg">
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                    <div class="form-group">
+                        <label class="font-noraml">多文件上传</label>
+                        <div class="file-loading">
+                            <input id="fileinput-demo-1" type="file" multiple>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input id="url" style="display: none" th:value="${doc.docUrl}">
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = $("#url")[0].value;
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '#',
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            initialPreviewFileType: 'pdf',
+            initialPreview: [
+                url
+            ]
+        });
+    });
+</script>
+</body>
+</html>

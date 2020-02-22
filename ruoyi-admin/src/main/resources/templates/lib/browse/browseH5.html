@@ -7,6 +7,7 @@
     <meta content="telephone=no" name="format-detection">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
     <th:block th:include="include :: brows-h5-css"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
     <th:block th:include="include :: brows-h5-js"/>
 
     <style>
@@ -14,10 +15,11 @@
             display: block;
         }
     </style>
-    <title>机场工程</title>
+    <title>机场</title>
 </head>
 
 <body>
+<script th:src="@{/js/bootstrap.min.js}"></script>
 <script language="JavaScript">
     if (window != top)
         top.location.href = location.href;
@@ -30,7 +32,7 @@
                    onmousedown="return inpmv(4973);"></a>
             </div>
             <div class="newHeadLogo">
-                <img height="43" th:src="@{/img/h5/jc_tm.png}" alt="山园">
+                <img height="43" th:src="@{/img/h5/jc_tm.png}" alt="机场">
             </div>
             <div class="search-box-new">
                 <div class="search-box-inner">
@@ -44,10 +46,6 @@
                 <div class="nav-slider">
                     <ul>
                         <li>
-                            <a href="#" th:each="tag:${tagList}" title="分类"
-                               onmousedown="return inpmv(6143);">
-                                <text th:text="${tag.tagName}"></text>
-                            </a>
                             <a href="#" th:each="tag:${tagList}" title="分类"
                                onmousedown="return inpmv(6143);">
                                 <text th:text="${tag.tagName}"></text>
@@ -97,10 +95,9 @@
         <!-- 内容 -->
         <!-- 推荐的文档-->
         <div id="sections">
-            <a id="pro536912735"
-               href="javascript:skip(#)"
-               onmousedown="return inpmv(4988);" target="_self" th:each="doc:${docList}">
-                <dl class="clear">
+            <a th:each="doc:${docList}" th:href="${doc.docUrl}"
+               onmousedown="return inpmv(4988);" target="_self">
+                <dl class="clear" th:value="${doc.docId}">
                     <dt>
                         <div class="bookPic">
                             <img th:alt="${doc.docImg}"
@@ -126,22 +123,24 @@
     <div style="height:32px;line-height:32px;text-align:center;font-size:12px;color:#bbb;padding-bottom:5px;">
         ©drebander.top
         <a style="color:#bbb;text-decoration:underline;" href="#"
-           target="_blank">山园</a></div>
-    <!-- 菜单页 -->
-    <!--
-需要数据有：
-isLogin: 用户是否登录
-userBean: 如果用户登录,登录用户Bean
-userImg: 如果用户登录,登录用户图标url
-usrTagDatas： 用户定制信息
- -->
-
+           target="_blank">机场</a>
+    </div>
     <span id="goBackTop" onclick="goBackTop();" class="goBackTop" style="visibility: hidden;"><span></span></span>
 </div>
+<!-- 弹出框 start -->
+<div class="wrapper wrapper-content animated fadeInRight" style="display: none" id="file-dialog">
+
+</div>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
 <script type="text/javascript">
     _pageId = 328;
 </script>
 <script type="text/javascript">
+
+    function view(obj) {
+        window.location.href = "view?docId=" + obj.getAttribute("value");
+    }
+
     (function (window) {
 
         function showGuide() {
@@ -214,9 +213,6 @@ usrTagDatas： 用户定制信息
             return null;
         }
 
-        // if(getCookie("closeGuideDiv")==null){
-        // 	showGuide();
-        // }
     })(window);
 </script>
 
@@ -290,11 +286,36 @@ usrTagDatas： 用户定制信息
     }
 </script>
 <script type="text/javascript">
-    //广告
 
-    docin_adload('135', 'adv_4');
-    //docin_adload('114','adv_4');
-    docin_adload('136', 'adv_9');
+    function view2(obj) {
+
+        $("#file-dialog").html("<div class=\"row\">\n" +
+            "        <div class=\"col-sm-12\">\n" +
+            "            <div class=\"ibox float-e-margins\">\n" +
+            "                <div class=\"ibox-content\">\n" +
+            "                    <div class=\"form-group\">\n" +
+            "                        <label class=\"font-noraml\">多文件上传</label>\n" +
+            "                        <div class=\"file-loading\">\n" +
+            "                            <input id=\"fileinput-demo-1\" type=\"file\" multiple>\n" +
+            "                        </div>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "    </div>");
+
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '#',
+            // overwriteInitial: true,
+            initialPreviewAsData: true,
+            initialPreviewFileType: 'pdf',
+            initialPreview: [
+                obj.getAttribute("value")
+            ]
+        });
+        $(".kv-file-zoom.btn.btn-sm.btn-kv.btn-default.btn-outline-secondary").click()
+    }
 
     jQuery(function () {
         jQuery('#headerTop').addClass('headerBg');

@@ -22,7 +22,7 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping("/lib/browse")
+@RequestMapping("/lib/")
 public class BrowseController extends BaseController {
 
     private static String PREFIX = "lib/browse";
@@ -36,7 +36,7 @@ public class BrowseController extends BaseController {
     }
 
     @RequiresPermissions("lib:browse:view")
-    @GetMapping()
+    @GetMapping("browse")
     public String browse(ModelMap mmap) {
         final LibTag query = new LibTag();
         query.setTagStatus("0");
@@ -48,12 +48,20 @@ public class BrowseController extends BaseController {
     }
 
     @RequiresPermissions("lib:tag:list")
-    @PostMapping("/list")
+    @PostMapping("browse/list")
     @ResponseBody
     public TableDataInfo list(LibTag tag) {
         startPage();
         List<LibTag> list = libTagService.selectTagList(tag);
         return getDataTable(list);
+    }
+
+    @RequiresPermissions("lib:browse:view")
+    @GetMapping("view")
+    public String view(ModelMap mmap, Long docId) {
+        final LibDoc libDoc = libDocService.selectDocById(docId);
+        mmap.put("doc", libDoc);
+        return PREFIX + "/viewH5";
     }
 
 }
