@@ -130,6 +130,15 @@
                     sortable: true,
                     align: 'center',
                     visible: false
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" onclick="\'' + row.docUrl + '\'"><i class="fa fa-edit"></i>预览</a> ');
+                        return actions.join('');
+                    }
                 }]
         };
         $.table.init(options);
