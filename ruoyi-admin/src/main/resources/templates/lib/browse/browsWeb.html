@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('文档列表')"/>
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="role-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            文档名称：<input type="text" name="docName"/>
+                        </li>
+                        <!--<li>-->
+                        <!--文档状态：<select name="docStatus" th:with="type=${@dict.getType('sys_normal_disable')}">-->
+                        <!--<option value="">所有</option>-->
+                        <!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
+                        <!--th:value="${dict.dictValue}"></option>-->
+                        <!--</select>-->
+                        <!--</li>-->
+                        <!--<li class="select-time">-->
+                        <!--<label>创建时间： </label>-->
+                        <!--<input type="text" class="time-input" id="startTime" placeholder="开始时间"-->
+                        <!--name="params[beginTime]"/>-->
+                        <!--<span>-</span>-->
+                        <!--<input type="text" class="time-input" id="endTime" placeholder="结束时间"-->
+                        <!--name="params[endTime]"/>-->
+                        <!--</li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <!--<div class="btn-group-sm" id="toolbar" role="group">-->
+        <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="lib:doc:add">-->
+        <!--<i class="fa fa-plus"></i> 新增-->
+        <!--</a>-->
+        <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()"-->
+        <!--shiro:hasPermission="lib:doc:edit">-->
+        <!--<i class="fa fa-edit"></i> 修改-->
+        <!--</a>-->
+        <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"-->
+        <!--shiro:hasPermission="lib:doc:remove">-->
+        <!--<i class="fa fa-remove"></i> 删除-->
+        <!--</a>-->
+        <!--</div>-->
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 弹出框 start -->
+<div class="wrapper wrapper-content animated fadeInRight" style="display: none" id="file-dialog">
+
+</div>
+<!-- 弹出框 end -->
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('lib:doc:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('lib:doc:remove')}]];
+    var prefix = ctx + "lib/doc";
+
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            viewUrl: prefix + "/view/{id}",
+            removeUrl: prefix + "/remove",
+            sortName: "docSort",
+            modalName: "文档",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    visible: false,
+                    field: 'docId',
+                    title: '文档编号',
+                },
+                {
+                    field: 'docName',
+                    title: '文档名称',
+                    sortable: true
+                },
+                {
+                    visible: false,
+                    title: '文档类型',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        if (row.docType == 2) {
+                            return "EXCEL";
+                        } else if (row.doctype == 1) {
+                            return "WORD";
+                        } else {
+                            return "PDF";
+                        }
+                    }
+                },
+                {
+                    title: '图片',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.imageView(row.docImg);
+                    }
+                },
+                {
+                    visible: false,
+                    title: '文档状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    sortable: true,
+                    align: 'center',
+                    visible: false
+                }]
+        };
+        $.table.init(options);
+    });
+
+
+    /* 文档状态显示 */
+    function statusTools(row) {
+        if (row.docStatus == 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.docId + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.docId + '\')"></i> ';
+        }
+    }
+
+    /* 文档管理-停用 */
+    function disable(docId) {
+        $.modal.confirm("确认要停用文档吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"docId": docId, "docStatus": 1});
+        })
+    }
+
+    /* 文档管理启用 */
+    function enable(docId) {
+        $.modal.confirm("确认要启用文档吗？", function () {
+            $.operate.post(prefix + "/changeStatus", {"docId": docId, "docStatus": 0});
+        })
+    }
+
+    function view2(docUrl) {
+
+        $("#file-dialog").html("<div class=\"row\">\n" +
+            "        <div class=\"col-sm-12\">\n" +
+            "            <div class=\"ibox float-e-margins\">\n" +
+            "                <div class=\"ibox-content\">\n" +
+            "                    <div class=\"form-group\">\n" +
+            "                        <label class=\"font-noraml\">多文件上传</label>\n" +
+            "                        <div class=\"file-loading\">\n" +
+            "                            <input id=\"fileinput-demo-1\" type=\"file\" multiple>\n" +
+            "                        </div>\n" +
+            "                    </div>\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "    </div>");
+
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': '#',
+            // overwriteInitial: true,
+            initialPreviewAsData: true,
+            initialPreviewFileType: 'pdf',
+            initialPreview: [
+                docUrl
+            ]
+        });
+        $(".kv-file-zoom.btn.btn-sm.btn-kv.btn-default.btn-outline-secondary").click()
+    }
+
+</script>
+</body>
+</html>

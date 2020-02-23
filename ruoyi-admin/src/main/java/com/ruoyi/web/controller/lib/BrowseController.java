@@ -56,12 +56,10 @@ public class BrowseController extends BaseController {
         return getDataTable(list);
     }
 
-    @RequiresPermissions("lib:browse:view")
-    @GetMapping("view")
-    public String view(ModelMap mmap, Long docId) {
-        final LibDoc libDoc = libDocService.selectDocById(docId);
-        mmap.put("doc", libDoc);
-        return PREFIX + "/viewH5";
+    @RequiresPermissions("lib:doc:view")
+    @GetMapping("browse_web")
+    public String doc() {
+        return PREFIX + "/browsWeb";
     }
 
 }
