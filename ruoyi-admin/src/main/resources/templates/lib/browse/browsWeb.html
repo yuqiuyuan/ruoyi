@@ -14,21 +14,17 @@
                         <li>
                             文档名称：<input type="text" name="docName"/>
                         </li>
-                        <!--<li>-->
-                        <!--文档状态：<select name="docStatus" th:with="type=${@dict.getType('sys_normal_disable')}">-->
-                        <!--<option value="">所有</option>-->
-                        <!--<option th:each="dict : ${type}" th:text="${dict.dictLabel}"-->
-                        <!--th:value="${dict.dictValue}"></option>-->
-                        <!--</select>-->
-                        <!--</li>-->
-                        <!--<li class="select-time">-->
-                        <!--<label>创建时间： </label>-->
-                        <!--<input type="text" class="time-input" id="startTime" placeholder="开始时间"-->
-                        <!--name="params[beginTime]"/>-->
-                        <!--<span>-</span>-->
-                        <!--<input type="text" class="time-input" id="endTime" placeholder="结束时间"-->
-                        <!--name="params[endTime]"/>-->
-                        <!--</li>-->
+                        <li>
+                            标签&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp：<select name="tagId">
+                            <option>
+                                <text text="所有"></text>
+                            </option>
+                            <option th:each="tag:${tagList}" th:value="${tag.tagId}">
+                                <text th:text="${tag.tagName}"></text>
+                            </option>
+                        </select>
+                        </li>
+
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
@@ -40,19 +36,6 @@
             </form>
         </div>
 
-        <!--<div class="btn-group-sm" id="toolbar" role="group">-->
-        <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="lib:doc:add">-->
-        <!--<i class="fa fa-plus"></i> 新增-->
-        <!--</a>-->
-        <!--<a class="btn btn-primary single disabled" onclick="$.operate.edit()"-->
-        <!--shiro:hasPermission="lib:doc:edit">-->
-        <!--<i class="fa fa-edit"></i> 修改-->
-        <!--</a>-->
-        <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"-->
-        <!--shiro:hasPermission="lib:doc:remove">-->
-        <!--<i class="fa fa-remove"></i> 删除-->
-        <!--</a>-->
-        <!--</div>-->
 
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table"></table>

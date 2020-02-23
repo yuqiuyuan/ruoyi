@@ -58,7 +58,9 @@ public class BrowseController extends BaseController {
 
     @RequiresPermissions("lib:doc:view")
     @GetMapping("browse_web")
-    public String doc() {
+    public String doc(ModelMap mmap) {
+        final List<LibTag> libTags = libTagService.selectTagList(new LibTag());
+        mmap.put("tagList", libTags);
         return PREFIX + "/browsWeb";
     }
 

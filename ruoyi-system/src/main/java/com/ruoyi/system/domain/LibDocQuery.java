@@ -14,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  **/
 @Data
-public class LibDoc extends BaseEntity {
+public class LibDocQuery extends BaseEntity {
     /**
      * 文档ID
      */
@@ -25,6 +25,10 @@ public class LibDoc extends BaseEntity {
      * 文档标题
      */
     private String docName;
+    /**
+     * 标签ID
+     */
+    private String tagId;
     /**
      * 文档类型
      */
@@ -74,9 +78,4 @@ public class LibDoc extends BaseEntity {
      * 文档顺序
      */
     private int docSort;
-
-    /**
-     * 标签ID
-     */
-    private Long tagId;
 }

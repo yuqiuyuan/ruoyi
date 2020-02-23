@@ -50,6 +50,9 @@
         <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
             and date_format(r.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
         </if>
+        <if test="tagId != null and tagId != ''">
+            AND doc_id in ( select doc_id from sys_doc_tag where del_flag = '0' and tag_id= #{tagId})
+        </if>
     </select>
 
     <select id="checkDocNameUnique" parameterType="String" resultMap="LibDocResult">

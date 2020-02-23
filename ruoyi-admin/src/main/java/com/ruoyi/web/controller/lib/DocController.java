@@ -10,10 +10,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.LibDoc;
-import com.ruoyi.system.domain.LibDocModel;
-import com.ruoyi.system.domain.LibDocTag;
-import com.ruoyi.system.domain.LibTag;
+import com.ruoyi.system.domain.*;
 import com.ruoyi.system.service.ILibDocService;
 import com.ruoyi.system.service.ILibDocTagService;
 import com.ruoyi.system.service.ILibTagService;
@@ -61,7 +58,7 @@ public class DocController extends BaseController {
 
     @RequiresPermissions("lib:doc:view")
     @GetMapping()
-    public String doc() {
+    public String doc(ModelMap mmap) {
         return PREFIX + "/doc";
     }
 
