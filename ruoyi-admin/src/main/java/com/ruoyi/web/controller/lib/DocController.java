@@ -18,6 +18,7 @@ import com.ruoyi.web.core.PdfHelper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ public class DocController extends BaseController {
     private final ILibDocService libDocService;
     private final ILibTagService libTagService;
     private final ILibDocTagService iLibDocTagService;
-    @Autowired
+    @Resource
     private ServerConfig serverConfig;
 
     @Autowired
@@ -57,13 +59,13 @@ public class DocController extends BaseController {
         this.iLibDocTagService = iLibDocTagService;
     }
 
-    @RequiresPermissions("operator")
+    @RequiresRoles("operator,develop")
     @GetMapping()
     public String doc(ModelMap mmap) {
         return PREFIX + "/doc";
     }
 
-    @RequiresPermissions("operator")
+    @RequiresRoles("operator,develop")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(LibDoc doc) {
@@ -85,7 +87,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresPermissions("operator")
+    @RequiresRoles("operator,develop")
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -123,7 +125,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresPermissions("operator")
+    @RequiresRoles("operator,develop")
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/addTag")
     @ResponseBody
@@ -166,7 +168,7 @@ public class DocController extends BaseController {
     /**
      * 修改保存文档
      */
-    @RequiresPermissions("operator")
+    @RequiresRoles("operator,develop")
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -198,14 +200,14 @@ public class DocController extends BaseController {
      * 文档状态修改
      */
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("operator")
+    @RequiresRoles("operator,develop")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(LibDoc doc) {
         return toAjax(libDocService.changeStatus(doc));
     }
 
-    @RequiresPermissions("system:role:remove")
+    @RequiresRoles("system:role:remove")
     @Log(title = "文档管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody

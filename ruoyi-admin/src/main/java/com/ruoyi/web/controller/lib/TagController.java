@@ -10,6 +10,7 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.LibTag;
 import com.ruoyi.system.service.ILibTagService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -63,7 +64,7 @@ public class TagController extends BaseController {
     /**
      * 新增保存标签
      */
-    @RequiresPermissions("develop,operator")
+    @RequiresRoles("develop,operator")
     @Log(title = "标签管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -109,7 +110,7 @@ public class TagController extends BaseController {
     /**
      * 修改保存标签
      */
-    @RequiresPermissions("develop,operator")
+    @RequiresRoles("develop,operator")
     @Log(title = "标签管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -128,14 +129,14 @@ public class TagController extends BaseController {
      * 标签状态修改
      */
     @Log(title = "标签管理", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("develop,operator")
+    @RequiresRoles("develop,operator")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(LibTag tag) {
         return toAjax(libTagService.changeStatus(tag));
     }
 
-    @RequiresPermissions("develop,operator")
+    @RequiresRoles("develop,operator")
     @Log(title = "角色管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
