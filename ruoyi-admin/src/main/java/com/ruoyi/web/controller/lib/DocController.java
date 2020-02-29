@@ -16,6 +16,7 @@ import com.ruoyi.system.service.ILibDocTagService;
 import com.ruoyi.system.service.ILibTagService;
 import com.ruoyi.web.core.PdfHelper;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,13 +57,13 @@ public class DocController extends BaseController {
         this.iLibDocTagService = iLibDocTagService;
     }
 
-    @RequiresPermissions("lib:doc:view")
+    @RequiresPermissions("operator")
     @GetMapping()
     public String doc(ModelMap mmap) {
         return PREFIX + "/doc";
     }
 
-    @RequiresPermissions("lib:doc:list")
+    @RequiresPermissions("operator")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(LibDoc doc) {
@@ -84,7 +85,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresPermissions("lib:doc:add")
+    @RequiresPermissions("operator")
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -122,7 +123,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresPermissions("lib:tag:add")
+    @RequiresPermissions("operator")
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/addTag")
     @ResponseBody
@@ -165,7 +166,7 @@ public class DocController extends BaseController {
     /**
      * 修改保存文档
      */
-    @RequiresPermissions("lib:doc:edit")
+    @RequiresPermissions("operator")
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -197,7 +198,7 @@ public class DocController extends BaseController {
      * 文档状态修改
      */
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("lib:doc:edit")
+    @RequiresPermissions("operator")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(LibDoc doc) {

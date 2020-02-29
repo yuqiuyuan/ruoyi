@@ -6,6 +6,7 @@ import com.ruoyi.system.domain.LibDoc;
 import com.ruoyi.system.domain.LibTag;
 import com.ruoyi.system.service.ILibDocService;
 import com.ruoyi.system.service.ILibTagService;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,7 @@ public class BrowseController extends BaseController {
         this.libDocService = libDocService;
     }
 
-    @RequiresPermissions("develop,operator,custom")
+    @RequiresGuest
     @GetMapping("browse")
     public String browse(ModelMap mmap) {
         final LibTag query = new LibTag();
@@ -47,7 +48,7 @@ public class BrowseController extends BaseController {
         return PREFIX + "/browseH5";
     }
 
-    @RequiresPermissions("develop,operator,custom")
+    @RequiresGuest
     @PostMapping("browse/list")
     @ResponseBody
     public TableDataInfo list(LibTag tag) {
@@ -56,7 +57,7 @@ public class BrowseController extends BaseController {
         return getDataTable(list);
     }
 
-    @RequiresPermissions("develop,operator,custom")
+    @RequiresGuest
     @GetMapping("browse_web")
     public String doc(ModelMap mmap) {
         final List<LibTag> libTags = libTagService.selectTagList(new LibTag());
