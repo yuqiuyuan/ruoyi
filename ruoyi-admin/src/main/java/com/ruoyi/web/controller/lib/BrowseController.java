@@ -35,7 +35,7 @@ public class BrowseController extends BaseController {
         this.libDocService = libDocService;
     }
 
-    @RequiresPermissions("lib:browse:view")
+    @RequiresPermissions("develop,operator,custom")
     @GetMapping("browse")
     public String browse(ModelMap mmap) {
         final LibTag query = new LibTag();
@@ -47,7 +47,7 @@ public class BrowseController extends BaseController {
         return PREFIX + "/browseH5";
     }
 
-    @RequiresPermissions("lib:tag:list")
+    @RequiresPermissions("develop,operator,custom")
     @PostMapping("browse/list")
     @ResponseBody
     public TableDataInfo list(LibTag tag) {
@@ -56,7 +56,7 @@ public class BrowseController extends BaseController {
         return getDataTable(list);
     }
 
-    @RequiresPermissions("lib:doc:view")
+    @RequiresPermissions("develop,operator,custom")
     @GetMapping("browse_web")
     public String doc(ModelMap mmap) {
         final List<LibTag> libTags = libTagService.selectTagList(new LibTag());
