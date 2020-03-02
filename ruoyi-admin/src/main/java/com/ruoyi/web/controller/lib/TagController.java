@@ -38,13 +38,13 @@ public class TagController extends BaseController {
         this.libTagService = libTagService;
     }
 
-    @RequiresPermissions("lib:tag:view")
+    @RequiresRoles("develop,operator")
     @GetMapping()
     public String tag() {
         return PREFIX + "/tag";
     }
 
-    @RequiresPermissions("lib:tag:list")
+    @RequiresRoles("develop,operator")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(LibTag tag) {

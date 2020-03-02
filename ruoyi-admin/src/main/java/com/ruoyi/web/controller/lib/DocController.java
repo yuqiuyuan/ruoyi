@@ -17,6 +17,7 @@ import com.ruoyi.system.service.ILibTagService;
 import com.ruoyi.web.core.PdfHelper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,13 +60,13 @@ public class DocController extends BaseController {
         this.iLibDocTagService = iLibDocTagService;
     }
 
-    @RequiresRoles("operator,develop")
+    @RequiresRoles(value = "develop", logical = Logical.OR)
     @GetMapping()
     public String doc(ModelMap mmap) {
         return PREFIX + "/doc";
     }
 
-    @RequiresRoles("operator,develop")
+    @RequiresRoles(value = "develop", logical = Logical.OR)
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(LibDoc doc) {
@@ -87,7 +88,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresRoles("operator,develop")
+    @RequiresRoles(value = "develop", logical = Logical.OR)
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -125,7 +126,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresRoles("operator,develop")
+    @RequiresRoles(value = "develop", logical = Logical.OR)
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/addTag")
     @ResponseBody
@@ -168,7 +169,7 @@ public class DocController extends BaseController {
     /**
      * 修改保存文档
      */
-    @RequiresRoles("operator,develop")
+    @RequiresRoles(value = "develop", logical = Logical.OR)
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -200,14 +201,14 @@ public class DocController extends BaseController {
      * 文档状态修改
      */
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
-    @RequiresRoles("operator,develop")
+    @RequiresPermissions("lib:doc")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(LibDoc doc) {
         return toAjax(libDocService.changeStatus(doc));
     }
 
-    @RequiresRoles("system:role:remove")
+    @RequiresPermissions("lib:doc:remove")
     @Log(title = "文档管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
