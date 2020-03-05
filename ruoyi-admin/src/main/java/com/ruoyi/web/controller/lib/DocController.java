@@ -60,13 +60,13 @@ public class DocController extends BaseController {
         this.iLibDocTagService = iLibDocTagService;
     }
 
-    @RequiresRoles(value = "develop", logical = Logical.OR)
+    @RequiresPermissions("lib:doc:view")
     @GetMapping()
     public String doc(ModelMap mmap) {
         return PREFIX + "/doc";
     }
 
-    @RequiresRoles(value = "develop", logical = Logical.OR)
+    @RequiresPermissions("lib:doc:view")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(LibDoc doc) {
@@ -78,6 +78,7 @@ public class DocController extends BaseController {
     /**
      * 新增文档
      */
+    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
     @GetMapping("/add")
     public String add(ModelMap mmap) {
         final ArrayList<Map<String, java.io.Serializable>> objects = new ArrayList<>(2);
@@ -88,7 +89,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresRoles(value = "develop", logical = Logical.OR)
+    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -126,7 +127,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresRoles(value = "develop", logical = Logical.OR)
+    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/addTag")
     @ResponseBody
@@ -169,7 +170,7 @@ public class DocController extends BaseController {
     /**
      * 修改保存文档
      */
-    @RequiresRoles(value = "develop", logical = Logical.OR)
+    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -201,14 +202,14 @@ public class DocController extends BaseController {
      * 文档状态修改
      */
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("lib:doc")
+    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(LibDoc doc) {
         return toAjax(libDocService.changeStatus(doc));
     }
 
-    @RequiresPermissions("lib:doc:remove")
+    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
     @Log(title = "文档管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody

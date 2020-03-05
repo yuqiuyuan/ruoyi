@@ -9,6 +9,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.LibTag;
 import com.ruoyi.system.service.ILibTagService;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,14 @@ public class TagController extends BaseController {
         this.libTagService = libTagService;
     }
 
-    @RequiresRoles("develop,operator")
+
+    @RequiresPermissions("lib:doc:view")
     @GetMapping()
     public String tag() {
         return PREFIX + "/tag";
     }
 
-    @RequiresRoles("develop,operator")
+    @RequiresPermissions("lib:doc:view")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(LibTag tag) {
@@ -56,6 +58,7 @@ public class TagController extends BaseController {
     /**
      * 新增标签
      */
+    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
     @GetMapping("/add")
     public String add() {
         return PREFIX + "/add";
@@ -64,7 +67,7 @@ public class TagController extends BaseController {
     /**
      * 新增保存标签
      */
-    @RequiresRoles("develop,operator")
+    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
     @Log(title = "标签管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -110,7 +113,7 @@ public class TagController extends BaseController {
     /**
      * 修改保存标签
      */
-    @RequiresRoles("develop,operator")
+    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
     @Log(title = "标签管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -129,14 +132,14 @@ public class TagController extends BaseController {
      * 标签状态修改
      */
     @Log(title = "标签管理", businessType = BusinessType.UPDATE)
-    @RequiresRoles("develop,operator")
+    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(LibTag tag) {
         return toAjax(libTagService.changeStatus(tag));
     }
 
-    @RequiresRoles("develop,operator")
+    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
     @Log(title = "角色管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
