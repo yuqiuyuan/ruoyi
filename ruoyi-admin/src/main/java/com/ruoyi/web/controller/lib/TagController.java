@@ -58,7 +58,7 @@ public class TagController extends BaseController {
     /**
      * 新增标签
      */
-    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
+    @RequiresPermissions("lib:tag:add")
     @GetMapping("/add")
     public String add() {
         return PREFIX + "/add";
@@ -67,7 +67,7 @@ public class TagController extends BaseController {
     /**
      * 新增保存标签
      */
-    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
+    @RequiresPermissions("lib:tag:add")
     @Log(title = "标签管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -113,7 +113,7 @@ public class TagController extends BaseController {
     /**
      * 修改保存标签
      */
-    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
+    @RequiresPermissions("lib:tag:edit")
     @Log(title = "标签管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -132,14 +132,14 @@ public class TagController extends BaseController {
      * 标签状态修改
      */
     @Log(title = "标签管理", businessType = BusinessType.UPDATE)
-    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
+    @RequiresPermissions("lib:tag:edit")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(LibTag tag) {
         return toAjax(libTagService.changeStatus(tag));
     }
 
-    @RequiresRoles(value = {"operator", "develop"}, logical = Logical.OR)
+    @RequiresPermissions("lib:tag:delete")
     @Log(title = "角色管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody

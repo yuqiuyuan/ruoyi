@@ -78,7 +78,7 @@ public class DocController extends BaseController {
     /**
      * 新增文档
      */
-    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
+    @RequiresPermissions("lib:doc:add")
     @GetMapping("/add")
     public String add(ModelMap mmap) {
         final ArrayList<Map<String, java.io.Serializable>> objects = new ArrayList<>(2);
@@ -89,7 +89,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
+    @RequiresPermissions("lib:doc:add")
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -127,7 +127,7 @@ public class DocController extends BaseController {
     /**
      * 新增保存文档
      */
-    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
+    @RequiresPermissions("lib:doc:add")
     @Log(title = "文档管理", businessType = BusinessType.INSERT)
     @PostMapping("/addTag")
     @ResponseBody
@@ -170,7 +170,7 @@ public class DocController extends BaseController {
     /**
      * 修改保存文档
      */
-    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
+    @RequiresPermissions("lib:doc:edit")
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -201,15 +201,15 @@ public class DocController extends BaseController {
     /**
      * 文档状态修改
      */
+    @RequiresPermissions("lib:doc:edit")
     @Log(title = "文档管理", businessType = BusinessType.UPDATE)
-    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(LibDoc doc) {
         return toAjax(libDocService.changeStatus(doc));
     }
 
-    @RequiresRoles(value = {"develop", "operator"}, logical = Logical.OR)
+    @RequiresPermissions("lib:doc:delete")
     @Log(title = "文档管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
